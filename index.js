@@ -11,30 +11,23 @@ const __dirname = dirname(__filename);
 const PORT = 5000;
 
 app.get("/", (req, res) => {
-  if (req.statusCode >= 400) {
-    const errorFile = path.join(__dirname, "public", "404.html");
-    res.sendFile(errorFile);
-  }
   const indexFile = path.join(__dirname, "public", "index.html");
   res.sendFile(indexFile);
 });
 
 app.get("/about", (req, res) => {
-  if (req.statusCode >= 400) {
-    const errorFile = path.join(__dirname, "public", "404.html");
-    res.sendFile(errorFile);
-  }
   const aboutFile = path.join(__dirname, "public", "about.html");
   res.sendFile(aboutFile);
 });
 
 app.get("/contact", (req, res) => {
-  if (req.statusCode >= 400) {
-    const errorFile = path.join(__dirname, "public", "404.html");
-    res.sendFile(errorFile);
-  }
   const contactFile = path.join(__dirname, "public", "contact-me.html");
   res.sendFile(contactFile);
+});
+
+app.use((req, res) => {
+  const errorFile = path.join(__dirname, "public", "404.html");
+  res.sendFile(errorFile);
 });
 
 app.listen(PORT, () =>
