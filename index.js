@@ -1,42 +1,42 @@
-import http from "http";
-import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
+import express from "express";
+
+const app = express();
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-const port = 5000;
+const PORT = 5000;
 
-const server = http.createServer((req, res) => {
-  let initialFile = "index.html";
-
-  switch (req.url) {
-    case "/":
-      initialFile = "index.html";
-      break;
-    case "/about":
-      initialFile = "about.html";
-      break;
-    case "/contact":
-      initialFile = "contact-me.html";
-      break;
-    default:
-      initialFile = "404.html";
+app.get("/", (req, res) => {
+  if (req.statusCode >= 400) {
+    const errorFile = path.join(__dirname, "public", "404.html");
+    res.sendFile(errorFile);
   }
-
-  const requestedFileLocation = path.join(__dirname, "public", initialFile);
-
-  const contentType = { "Content-Type": "text/html" };
-
-  fs.readFile(requestedFileLocation, (err, data) => {
-    if (err) throw err;
-    res.writeHead(200, contentType);
-    res.end(data);
-  });
+  const indexFile = path.join(__dirname, "public", "index.html");
+  res.sendFile(indexFile);
 });
 
-server.listen(5000, () =>
-  console.log(`Server running at port http://localhost:${port}`)
+app.get("/about", (req, res) => {
+  if (req.statusCode >= 400) {
+    const errorFile = path.join(__dirname, "public", "404.html");
+    res.sendFile(errorFile);
+  }
+  const aboutFile = path.join(__dirname, "public", "about.html");
+  res.sendFile(aboutFile);
+});
+
+app.get("/contact", (req, res) => {
+  if (req.statusCode >= 400) {
+    const errorFile = path.join(__dirname, "public", "404.html");
+    res.sendFile(errorFile);
+  }
+  const contactFile = path.join(__dirname, "public", "contact-me.html");
+  res.sendFile(contactFile);
+});
+
+app.listen(PORT, () =>
+  console.log(`Server running at port http://localhost:${PORT}`)
 );
